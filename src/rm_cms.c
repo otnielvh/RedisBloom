@@ -82,6 +82,11 @@ int CMSketch_Create(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) {
     cms = NewCMSketch(width, depth);
     RedisModule_ModuleTypeSetValue(key, CMSketchType, cms);
 
+    printf("\n\n\n\n");
+    printf("CMS initialized with width of %lld\n", width);
+    printf("and depth of %lld\n", depth);
+    CMS_Print(cms);
+
     RedisModule_CloseKey(key);
     RedisModule_ReplicateVerbatim(ctx);
     RedisModule_ReplyWithSimpleString(ctx, "OK");
@@ -120,8 +125,10 @@ int CMSketch_IncrBy(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) {
     CMSPair *pairArray = CMS_CALLOC(pairCount, sizeof(CMSPair));
     parseIncrByArgs(ctx, argv, argc, &pairArray, pairCount);
     for (int i = 0; i < pairCount; ++i) {
+        printf("\n\n\n\nIncrease key : '%s' by : %lld\n\n", pairArray[i].key, pairArray[i].value);
         CMS_IncrBy(cms, pairArray[i].key, pairArray[i].keylen, pairArray[i].value);
     }
+    CMS_Print(cms);
 
     CMS_FREE(pairArray);
     RedisModule_CloseKey(key);
@@ -144,10 +151,14 @@ int CMSketch_Query(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) {
     int itemCount = argc - 2;
     size_t length = 0;
     RedisModule_ReplyWithArray(ctx, itemCount);
+    printf("\n\n\n\n");
     for (int i = 0; i < itemCount; ++i) {
         const char *str = RedisModule_StringPtrLen(argv[2 + i], &length);
-        RedisModule_ReplyWithLongLong(ctx, CMS_Query(cms, str, length));
+        size_t count = CMS_Query(cms, str, length);
+        RedisModule_ReplyWithLongLong(ctx, count);
+        printf("Count query for item : '%s' is %lld\n", str, count);
     }
+    printf("\n\n\n\n");
 
     return REDISMODULE_OK;
 }

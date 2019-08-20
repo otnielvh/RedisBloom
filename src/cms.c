@@ -101,15 +101,18 @@ void CMS_MergeParams(mergeParams params) {
 }
 
 
-/************ used for debugging *******************
+/************ used for debugging *******************/
 void CMS_Print(const CMSketch *cms) {
     assert(cms);
 
     for (int i = 0; i < cms->depth; ++i) {
+        printf("-----------------\n");
+        printf("| ");
         for (int j = 0; j < cms->width; ++j) {
-            printf("%d\t", cms->array[(i * cms->width) + j]);
+            printf("%d | ", cms->array[(i * cms->width) + j]);
         }
         printf("\n");
     }
-    printf("\tCounter is %lu\n", cms->counter);
-} */
+    printf("-----------------\n");
+    printf("Total counter is %lu\n\n", cms->counter);
+}
