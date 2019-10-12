@@ -4,6 +4,7 @@
 #include "rm_cms.h"
 #include "rm_topk.h"
 #include "version.h"
+#include "bucket_bloom.h"
 
 #include <assert.h>
 #include <strings.h> // strncasecmp
@@ -1015,6 +1016,16 @@ int RedisModule_OnLoad(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) 
     // Bloom - AOF
     CREATE_ROCMD("BF.SCANDUMP", BFScanDump_RedisCommand);
     CREATE_WRCMD("BF.LOADCHUNK", BFLoadChunk_RedisCommand);
+
+    // Bucket bloom filter
+//    CREATE_WRCMD("BBF.RESERVE", BucketBFReserve_RedisCommand);
+    CREATE_WRCMD("BBF.ADD", BucketBFAdd_RedisCommand);
+    CREATE_WRCMD("BBF.INCTIME", BucketBFIncTime_RedisCommand);
+    CREATE_WRCMD("BBF.SETTIME", BucketBFSetTime_RedisCommand);
+    CREATE_WRCMD("BBF.CLRTIME", BucketBFClearTime_RedisCommand);
+    CREATE_ROCMD("BBF.EXISTS", BucketBFCheck_RedisCommand);
+    CREATE_ROCMD("BBF.INFO", BucketBFInfo_RedisCommand);
+//    //CREATE_ROCMD("BBF.MEXISTS", BucketBFCheck_RedisCommand);
 
     // Cuckoo Filter commands
     CREATE_WRCMD("CF.RESERVE", CFReserve_RedisCommand);

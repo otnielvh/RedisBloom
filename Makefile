@@ -37,7 +37,8 @@ DEPS = $(ROOT)/contrib/MurmurHash2.o \
 	   $(SRCDIR)/rm_topk.o \
 	   $(SRCDIR)/topk.o \
 	   $(SRCDIR)/rm_cms.o \
-	   $(SRCDIR)/cms.o 
+	   $(SRCDIR)/cms.o \
+	   $(SRCDIR)/bucket_bloom.o
 
 export 
 
